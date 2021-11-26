@@ -5,6 +5,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton
 from PyQt5.QtWidgets import QLabel
 from PIL import Image
 from PyQt5.QtGui import QPainter, QColor
+from тык import Ui_MainWindow
 
 
 def resize(size):
@@ -13,11 +14,11 @@ def resize(size):
     im2.save('round_new.png')
 
 
-class Example(QMainWindow):
+class Example(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
 
-        uic.loadUi('тык.ui', self)
+        self.setupUi(self)
         self.do_paint = False
         self.pushButton.clicked.connect(self.paint)
 
@@ -37,14 +38,12 @@ class Example(QMainWindow):
 
     def draw(self, qp):
         # Задаем кисть
-        qp.setBrush(QColor(255, 255, 0))
+        col1, col2, col3 = random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)
+        qp.setBrush(QColor(col1, col2, col3))
         # Рисуем прямоугольник заданной кистью
         x = random.randint(20, 100)
         cx, cy = random.randint(0, 250), random.randint(0, 250)
         qp.drawEllipse(cx, cy, x, x)
-
-
-
 
 
 if __name__ == '__main__':
