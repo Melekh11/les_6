@@ -1,13 +1,14 @@
 import sys
 import sqlite3
-from PyQt5 import uic
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QWidget
+from add import Ui_Form
+from release.not_main import Ui_MainWindow
 
 
-class Change(QWidget):
+class Change(QWidget, Ui_Form):
     def __init__(self):
         super().__init__()
-        uic.loadUi('addEditCoffeeForm.ui', self)
+        self.setupUi(self)
 
         self.pushButton.clicked.connect(self.app)
 
@@ -40,11 +41,11 @@ class Change(QWidget):
 
 
 
-class Example(QMainWindow):
+class Example(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
 
-        uic.loadUi('main.ui', self)
+        self.setupUi(self)
 
         self.pushButton.clicked.connect(self.ch)
 
