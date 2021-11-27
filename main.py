@@ -1,49 +1,29 @@
 import sys
-import random
+import sqlite3
 from PyQt5 import uic
-from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton
-from PyQt5.QtWidgets import QLabel
-from PIL import Image
-from PyQt5.QtGui import QPainter, QColor
-from тык import Ui_MainWindow
+from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidgetItem
 
 
-def resize(size):
-    im = Image.open('round.png')
-    im2 = im.resize((size, size))
-    im2.save('round_new.png')
-
-
-class Example(QMainWindow, Ui_MainWindow):
+class Example(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.setupUi(self)
-        self.do_paint = False
-        self.pushButton.clicked.connect(self.paint)
+        uic.loadUi('main.ui', self)
 
-    def paintEvent(self, event):
-        if self.do_paint:
-            # Создаем объект QPainter для рисования
-            qp = QPainter()
-            # Начинаем процесс рисования
-            qp.begin(self)
-            self.draw(qp)
-            # Завершаем рисование
-            qp.end()
+        con = sqlite3.connect("coffee.sqlite")
+        cur = con.cursor()
+        arr = cur.execute('''
+                            SELECT * FROM coffee
+                            ''').fetchall()
 
-    def paint(self):
-        self.do_paint = True
-        self.repaint()
+        for i, row in enumerate(arr):
+            self.tableWidget.setRowCount(
+                self.tableWidget.rowCount() + 1)
+            for j, elem in enumerate(row):
+                self.tableWidget.setItem(
+                    i, j, QTableWidgetItem(str(elem)))
 
-    def draw(self, qp):
-        # Задаем кисть
-        col1, col2, col3 = random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)
-        qp.setBrush(QColor(col1, col2, col3))
-        # Рисуем прямоугольник заданной кистью
-        x = random.randint(20, 100)
-        cx, cy = random.randint(0, 250), random.randint(0, 250)
-        qp.drawEllipse(cx, cy, x, x)
+        con.close()
 
 
 if __name__ == '__main__':
